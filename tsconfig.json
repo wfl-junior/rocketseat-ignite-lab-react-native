@@ -4,7 +4,8 @@
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "isolatedModules": true
   },
   "extends": "expo/tsconfig.base"
 }

@@ -1,32 +1,29 @@
-import React, { Fragment } from "react";
-import { StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+  Roboto_400Regular,
+  Roboto_700Bold,
+  useFonts,
+} from "@expo-google-fonts/roboto";
+import { NativeBaseProvider } from "native-base";
+import { StatusBar } from "react-native";
+import { Loading } from "./components/Loading";
+import { SignIn } from "./screens/SignIn";
+import { THEME } from "./styles/theme";
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#101214",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    color: "white",
-    fontSize: 36,
-    fontWeight: "700",
-  },
-});
+export const App: React.FC = () => {
+  const [fontsLoaded] = useFonts({
+    Roboto_400Regular,
+    Roboto_700Bold,
+  });
 
-export default function App() {
   return (
-    <Fragment>
+    <NativeBaseProvider theme={THEME}>
       <StatusBar
         barStyle="light-content"
         backgroundColor="transparent"
         translucent
       />
 
-      <View style={styles.container}>
-        <Text style={styles.title}>Hello World</Text>
-      </View>
-    </Fragment>
+      {fontsLoaded ? <SignIn /> : <Loading />}
+    </NativeBaseProvider>
   );
-}
+};
