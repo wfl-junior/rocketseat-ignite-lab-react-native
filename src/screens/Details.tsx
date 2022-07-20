@@ -48,7 +48,7 @@ export const Details: React.FC = () => {
   useEffect(() => {
     setIsOrderLoading(true);
 
-    firestore()
+    const subscriber = firestore()
       .collection<OrderDTO>("orders")
       .doc(orderId)
       .onSnapshot(document => {
@@ -77,6 +77,8 @@ export const Details: React.FC = () => {
           setIsOrderLoading(false);
         }
       }, console.warn);
+
+    return subscriber;
   }, [orderId]);
 
   if (isOrderLoading) {
