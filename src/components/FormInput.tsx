@@ -23,6 +23,7 @@ export const FormInput = <T extends FieldValues = FieldValues>({
   my,
   marginX,
   marginY,
+  flex,
   name,
   control,
   error,
@@ -44,6 +45,7 @@ export const FormInput = <T extends FieldValues = FieldValues>({
     my={my}
     marginX={marginX}
     marginY={marginY}
+    flex={flex}
   >
     <Controller
       name={name}
@@ -64,6 +66,7 @@ export const FormInput = <T extends FieldValues = FieldValues>({
             borderColor: "green.500",
             bg: "gray.700",
           }}
+          flex={flex}
           {...props}
           value={value}
           onChangeText={onChange}

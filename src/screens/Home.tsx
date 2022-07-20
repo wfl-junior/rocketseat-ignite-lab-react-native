@@ -19,42 +19,50 @@ import { Button } from "../components/Button";
 import { Filter } from "../components/Filter";
 import { Loading } from "../components/Loading";
 import { Order, OrderState, OrderStatus } from "../components/Order";
+import { useAuthContext } from "../contexts/AuthContext";
 import { OrderDTO } from "../DTOs/OrderDTO";
 import { firestoreDateFormat } from "../utils/firestoreDateFormat";
 
 export const Home: React.FC = () => {
   const { navigate } = useNavigation();
   const { colors } = useTheme();
+  const { user } = useAuthContext();
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus>("open");
+  const [userFilter, setUserFilter] = useState<"all" | "mine">("all");
   const [orders, setOrders] = useState<OrderState[]>([]);
 
   useEffect(() => {
     setIsLoading(true);
 
-    const subscriber = firestore()
+    let query = firestore()
       .collection<OrderDTO>("orders")
-      .where("status", "==", selectedStatus)
-      .onSnapshot(snapshot => {
-        const data = snapshot.docs.map((document): OrderState => {
-          const { patrimony, description, status, created_at } =
-            document.data();
+      .orderBy("created_at", "asc")
+      .where("status", "==", selectedStatus);
 
-          return {
-            id: document.id,
-            patrimony,
-            description,
-            status,
-            when: firestoreDateFormat(created_at),
-          };
-        });
+    if (userFilter === "mine") {
+      query = query.where("user_uid", "==", user!.uid);
+    }
 
-        setOrders(data);
-        setIsLoading(false);
+    const subscriber = query.onSnapshot(snapshot => {
+      const data = snapshot.docs.map((document): OrderState => {
+        const { patrimony, description, status, created_at } = document.data();
+
+        return {
+          id: document.id,
+          patrimony,
+          description,
+          status,
+          when: firestoreDateFormat(created_at),
+        };
       });
 
+      setOrders(data);
+      setIsLoading(false);
+    }, console.warn);
+
     return subscriber;
-  }, [selectedStatus]);
+  }, [selectedStatus, userFilter, user!.uid]);
 
   function handleNewOrder() {
     navigate("new");
@@ -104,6 +112,22 @@ export const Home: React.FC = () => {
           <Text color="gray.200">{orders.length}</Text>
         </HStack>
 
+        <HStack space={3} mb={2}>
+          <Filter
+            type="closed"
+            title="Todas"
+            onPress={() => setUserFilter("all")}
+            isActive={userFilter === "all"}
+          />
+
+          <Filter
+            type="closed"
+            title="Minhas"
+            onPress={() => setUserFilter("mine")}
+            isActive={userFilter === "mine"}
+          />
+        </HStack>
+
         <HStack space={3} mb={8}>
           <Filter
             type="open"
@@ -137,8 +161,9 @@ export const Home: React.FC = () => {
             ListEmptyComponent={() => (
               <Center>
                 <ChatTeardropText color={colors.gray[300]} size={40} />
+
                 <Text color="gray.300" fontSize="xl" mt={6} textAlign="center">
-                  Você ainda não possui
+                  {userFilter === "all" ? "Não há" : "Você ainda não possui"}
                   {"\n"}
                   solicitações{" "}
                   {selectedStatus === "open" ? "em andamento" : "finalizadas"}
