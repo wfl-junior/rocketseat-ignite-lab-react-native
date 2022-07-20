@@ -6,7 +6,12 @@ import { Register } from "../screens/Register";
 const { Navigator, Screen } = createNativeStackNavigator();
 
 export const AppRoutes: React.FC = () => (
-  <Navigator screenOptions={{ headerShown: false }}>
+  <Navigator
+    screenOptions={{
+      headerShown: false,
+      animation: "fade_from_bottom",
+    }}
+  >
     <Screen name="home" component={Home} />
     <Screen name="new" component={Register} />
     <Screen name="details" component={Details} />

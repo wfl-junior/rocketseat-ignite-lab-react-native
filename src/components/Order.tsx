@@ -16,15 +16,16 @@ import {
 
 export type OrderStatus = "open" | "closed";
 
-export interface OrderDTO {
+export interface OrderState {
   id: string;
   patrimony: string;
+  description: string;
   when: string;
   status: OrderStatus;
 }
 
 interface OrderProps extends IPressableProps {
-  order: OrderDTO;
+  order: OrderState;
 }
 
 export const Order: React.FC<OrderProps> = ({ order, ...props }) => {
