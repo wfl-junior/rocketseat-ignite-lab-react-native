@@ -44,11 +44,11 @@ export const Register: React.FC = () => {
 
       await firestore().collection("orders").add(newOrder);
 
+      Alert.alert("Solicitação", "Solicitação registrada com sucesso.");
       goBack();
     } catch (error) {
       console.warn(error);
       setIsLoading(false);
-
       Alert.alert("Solicitação", "Não foi possível registrar o pedido.");
     }
   }
