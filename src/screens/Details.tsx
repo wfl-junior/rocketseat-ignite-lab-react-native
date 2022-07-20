@@ -46,11 +46,12 @@ export const Details: React.FC = () => {
   const { orderId } = params as DetailsRouteParams;
 
   useEffect(() => {
+    setIsOrderLoading(true);
+
     firestore()
       .collection<OrderDTO>("orders")
       .doc(orderId)
-      .get()
-      .then(document => {
+      .onSnapshot(document => {
         const data = document.data();
 
         if (data) {
@@ -72,10 +73,10 @@ export const Details: React.FC = () => {
             when: firestoreDateFormat(created_at),
             closed_at: closed_at ? firestoreDateFormat(closed_at) : null,
           });
+
+          setIsOrderLoading(false);
         }
-      })
-      .catch(console.warn)
-      .finally(() => setIsOrderLoading(false));
+      }, console.warn);
   }, [orderId]);
 
   if (isOrderLoading) {
