@@ -6,6 +6,8 @@ export declare global {
       home: undefined;
       new: undefined;
       details: DetailsRouteParams;
+      signIn: undefined;
+      signUp: undefined;
     }
   }
 }

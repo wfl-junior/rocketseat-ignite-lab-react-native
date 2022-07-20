@@ -6,6 +6,7 @@ import {
 import { NativeBaseProvider } from "native-base";
 import { StatusBar } from "react-native";
 import { Loading } from "./components/Loading";
+import { AuthContextProvider } from "./contexts/AuthContext";
 import { Routes } from "./routes";
 import { THEME } from "./styles/theme";
 
@@ -23,7 +24,9 @@ export const App: React.FC = () => {
         translucent
       />
 
-      {fontsLoaded ? <Routes /> : <Loading />}
+      <AuthContextProvider>
+        {fontsLoaded ? <Routes /> : <Loading />}
+      </AuthContextProvider>
     </NativeBaseProvider>
   );
 };
