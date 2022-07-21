@@ -4,7 +4,7 @@
     "slug": "rockethelp",
     "version": "0.1.0",
     "assetBundlePatterns": ["**/*"],
-    "pluging": ["@react-native-firebase/app"],
+    "plugins": ["@react-native-firebase/app"],
     "android": {
       "package": "com.rockethelp",
       "googleServicesFile": "./google-services.json"
